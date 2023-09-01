@@ -4,7 +4,7 @@ class Solution { //Blind75 //Striver //LeetcodePatterns //Arrays & Hashing
         
         for (int i = 0; i < nums.length; i++) {
             int val = nums[i];
-            int diff = target - val; // Calculate the difference
+            int diff = target - val; // Calculate the difference.
             
             if (hashmap.containsKey(diff)) {
                 return new int[] { hashmap.get(diff), i }; // Return indices if difference is found
