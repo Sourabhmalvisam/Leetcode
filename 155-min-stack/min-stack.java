@@ -1,40 +1,58 @@
 class MinStack {
-   Stack<Integer> stack ;
-     Stack<Integer> minStack ;
+  static Stack<Long> stack;
+    static long minEle;
     public MinStack() {
-         
-   
-        stack=new Stack<>();
-        minStack= new Stack<>();
-    
+        stack= new Stack<>();
     }
     
-    public void push(int ele) {
-        stack.push(ele);
-        if (minStack.size() == 0 || minStack.peek() >= ele) {
-            minStack.push(ele);
+    public void push(int val) {
+         if (stack.size() == 0) {
+            stack.push((long) val);
+            minEle = (long) val;
+        } else {
+            if ((long) val >= minEle) {
+                stack.push((long) val);
+            } else {
+                stack.push(2 * (long) (val) - minEle);
+                minEle = (long) val;
+            }
+
         }
     }
     
     public void pop() {
-           if (stack.size() == 0)
+        if (stack.size() == 0)
             return;
-        int ele = stack.pop();
-        if (ele == minStack.peek())
-            minStack.pop();
-   
+        else {
+            if (stack.peek() >= minEle) {
+               stack.pop();
+            } else {
+                minEle = 2 * minEle - stack.peek();
+                stack.pop();
+            }
+
+        } 
     }
     
     public int top() {
-        return stack.peek();
+         if (stack.size() == 0)
+            return -1;
+        else {
+            long top = stack.peek();
+            if (stack.peek() >= minEle)
+                return (int) top;
+            else {
+                return (int) minEle;
+            }
+        }
         
     }
     
     public int getMin() {
-            if (minStack.size() == 0)
+         if (stack.size() == 0)
             return -1;
         else
-            return minStack.peek();
+            return (int) minEle;
     }
 }
 
