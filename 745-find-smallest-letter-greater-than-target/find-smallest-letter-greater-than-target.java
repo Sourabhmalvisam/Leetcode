@@ -11,7 +11,7 @@ class Solution {
 
             if (target >= letters[mid]) {
                 low = mid + 1;
-            } else if (target <= letters[mid]) {
+            } else  {
 
                 res = letters[mid];
                 high = mid - 1;
