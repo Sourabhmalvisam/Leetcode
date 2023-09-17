@@ -11,7 +11,7 @@ class Solution {
 
         int notTake=dp[i-1][j];
         int take=(int)Math.pow(10,9);
-      if (coins[i] <= amount && j - coins[i] >= 0) {
+      if (coins[i] <= j ) {
     take = 1 + dp[i][j-coins[i]]; // Use dp[i-1] here
 }
 
