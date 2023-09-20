@@ -1,26 +1,24 @@
 class Solution {
-   
-    public int coinChange(int[] coins, int amount) {
-     int[][]   dp = new int[coins.length][amount+1];
-        for(int j=0;j<=amount;j++){
-            if(j%coins[0]==0) dp[0][j]=j/coins[0];
-            else dp[0][j]=(int )Math.pow(10,9);
+    public static int solve(int arr[], int idx, int amount,int[][]dp){
+        if(idx==0){
+            if(amount%arr[idx]==0) return amount/arr[idx];
+            else return (int)Math.pow(10,9);
         }
-        for(int i=1;i<dp.length;i++){
-            for(int j=0;j<dp[0].length;j++){
-
-        int notTake=dp[i-1][j];
+        if(dp[idx][amount]!=-1) return dp[idx][amount];
+        int notTake=solve(arr,idx-1,amount,dp);
         int take=(int)Math.pow(10,9);
-      if (coins[i] <= j ) {
-    take = 1 + dp[i][j-coins[i]]; // Use dp[i-1] here
-}
-
-        dp[i][j]=Math.min(take,notTake);
-            }
+        if(arr[idx]<=amount) take=1+solve(arr,idx,amount-arr[idx],dp);
+        int ans=Math.min(notTake, take);
+        return dp[idx][amount]=ans;
+    }
+    public int coinChange(int[] coins, int amount) {
+        int dp[][] = new int[coins.length][amount+1];
+        for(int [] row: dp){
+            Arrays.fill(row,-1);
         }
-        int ans=dp[coins.length-1][amount];
-        if(ans>=(int)Math.pow(10,9)) return -1;
-        else return ans;
-        
+        int ans= solve(coins, coins.length-1,amount,dp);
+        if(ans>=(int)Math.pow(10,9))
+        return -1; else return ans;
+    
     }
 }
