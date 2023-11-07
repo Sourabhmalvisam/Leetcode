@@ -1,51 +1,36 @@
 class Solution {
-      public static int binarySearch(int arr[], int ele, int start, int end) {
-        while (start <= end) {
-            int mid = start + (end - start) / 2;
-            if (arr[mid] == ele) {
-                return mid; // 'ele' found at index 'mid'.
-            } else if (ele > arr[mid]) {
-                start = mid + 1; // Adjust the search range to the right.
-            } else {
-                end = mid - 1; // Adjust the search range to the left.
-            }
-        }
-        return -1; // 'ele' not found in the 'arr'.
-    }
 
-    // Function to find the index of the minimum element in the rotated array.
-    // Returns the index of the minimum element.
-    static int findMinElementIndex(int[] arr) {
-        int n = arr.length;
-        int start = 0, end = n - 1;
+	public int search(int[] arr, int k) {
+		int n = arr.length;
+		int low = 0, high = n - 1;
 
-        while (start <= end) {
-            int mid = start + (end - start) / 2;
-            int next = (mid + 1) % n;
-            int prev = (mid + n - 1) % n;
+		while (low <= high) {
+			int mid = (low + high) / 2;
 
-            // Check if the current element is the minimum element in the rotated array.
-            if (arr[mid] <= arr[next] && arr[mid] <= arr[prev]) {
-                return mid; // Index of the minimum element.
-            } else if (arr[mid] <= arr[end]) { // Note: Bhai ye wala if pehle likhna wrna ans nahi ayega.
-                end = mid - 1; // Adjust the search range to the left.
-            } else if (arr[start] <= arr[mid]) {
-                start = mid + 1; // Adjust the search range to the right.
-            }
-        }
-        return -1; // If no rotations are found (unlikely scenario).
-    }
+			// if mid points to the target
+			if (arr[mid] == k)
+				return mid;
 
-    // Function to find an element 'target' in the rotated and sorted array.
-    // Returns the index of 'target' if found, otherwise -1.
-    public static int findElement(int arr[], int target) {
-        int n = arr.length;
-        int minIdx = findMinElementIndex(arr); // Find the index of the minimum element.
-        int ans1 = binarySearch(arr, target, 0, minIdx - 1); // Search in the left half.
-        int ans2 = binarySearch(arr, target, minIdx, n - 1); // minIdx ko inculde karna hai bhai function call me.
-        return (ans1 == -1) ? ans2 : ans1; // Return the first valid index found.
-    }
-    public int search(int[] nums, int target) {
-        return findElement(nums, target);
-    }
+			// if left part is sorted
+			if (arr[low] <= arr[mid]) {
+				if (arr[low] <= k && k  <= arr[mid]) {
+					// element exists
+					high = mid - 1;
+				} else {
+					// element does not exist
+					low = mid + 1;
+				}
+			} else { // if right part is sorted
+				if (arr[mid] <= k && k  <= arr[high]) {
+					// element exists
+					low = mid + 1;
+				} else {
+					// element does not exist
+					high = mid - 1;
+				}
+			}
+		}
+
+		return -1;
+	}
 }
