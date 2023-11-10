@@ -1,44 +1,71 @@
 class Solution {
-    public int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
-        Map<Integer, Map<Integer, Integer>> graph = new HashMap<>();
-        for (int[] flight : flights) {
-            int u = flight[0];
-            int v = flight[1];
-            int p = flight[2];
-            graph.computeIfAbsent(u, k1 -> new HashMap<>()).put(v, p);
+    // Pair class to represent an edge in the graph
+    class Edge {
+        int destination;
+        int weight;
+
+        public Edge(int destination, int weight) {
+            this.destination = destination;
+            this.weight = weight;
+        }
+    }
+
+    // Triple class to represent a step, node, and distance during BFS
+    class Triple {
+        int steps;
+        int node;
+        int distance;
+
+        public Triple(int steps, int node, int distance) {
+            this.steps = steps;
+            this.node = node;
+            this.distance = distance;
+        }
+    }
+
+    public int findCheapestPrice(int n, int[][] edges, int src, int dst, int k) {
+        // Adjacency list to represent the graph
+        ArrayList<ArrayList<Edge>> adjacencyList = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            adjacencyList.add(new ArrayList<>());
         }
 
-        Map<Integer, Integer> seen = new HashMap<>();
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> Integer.compare(a[0], b[0]));
-        pq.offer(new int[]{0, 0, src});
+        // Adding edges to the adjacency list
+        for (int[] edge : edges) {
+            adjacencyList.get(edge[0]).add(new Edge(edge[1], edge[2]));
+        }
 
-        while (!pq.isEmpty()) {
-            int[] current = pq.poll();
-            int cost = current[0];
-            int hops = current[1];
-            int city = current[2];
-            seen.put(city, hops);
+        // Array to store minimum distances from source to each node
+        int[] minDistances = new int[n];
+        Arrays.fill(minDistances, Integer.MAX_VALUE);
+        minDistances[src] = 0;
 
-            if (city == dst) {
-                return cost;
-            }
+        // Queue for BFS traversal
+        Queue<Triple> queue = new LinkedList<>();
+        queue.offer(new Triple(0, src, 0));
 
-            if (hops > k) {
+        // BFS traversal
+        while (!queue.isEmpty()) {
+            Triple front = queue.poll();
+
+            // Check if steps exceed the limit
+            if (front.steps > k) {
                 continue;
             }
 
-            if (graph.containsKey(city)) {
-                for (Map.Entry<Integer, Integer> entry : graph.get(city).entrySet()) {
-                    int nextCity = entry.getKey();
-                    int nextCost = entry.getValue();
-                    if (seen.containsKey(nextCity) && seen.get(nextCity) <= hops) {
-                        continue;
-                    }
-                    pq.offer(new int[]{cost + nextCost, hops + 1, nextCity});
+            // Explore neighbors and update minimum distances
+            for (Edge neighbor : adjacencyList.get(front.node)) {
+                int totalDistance = front.distance + neighbor.weight;
+
+                // Update if the new distance is smaller
+                if (totalDistance < minDistances[neighbor.destination] && front.steps <= k) {
+                    minDistances[neighbor.destination] = totalDistance;
+                    queue.offer(new Triple(front.steps + 1, neighbor.destination, totalDistance));
                 }
             }
         }
 
-        return -1;
+        // If destination is not reachable, return -1; otherwise, return the minimum distance
+        return minDistances[dst] == Integer.MAX_VALUE ? -1 : minDistances[dst];
     }
 }
