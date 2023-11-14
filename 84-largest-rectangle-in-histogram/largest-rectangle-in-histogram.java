@@ -1,68 +1,38 @@
 class Solution {
-     Stack<Integer> s=new Stack<>();
-    public int largestRectangleArea(int[] a) {
-        int[] right=nsr(a);
-        s.clear();
-        int[] left=nsl(a);
-        int max=Integer.MIN_VALUE;
-        int[] width=new int[a.length];
-        int[] area=new int[a.length];
-        for(int i=0;i<a.length;i++){
-            width[i]=right[i]-left[i]-1;
-            area[i]=a[i]* width[i];
-            max=Math.max(area[i],max);
-        }
-        return max;
-    }
-    
-    public int[] nsr(int[] a){
-        int[] b=new int[a.length];
-        int index=b.length-1;
-       
-
-        int pseudo=a.length;
-        for(int i=a.length-1;i>=0;i--){
-            if(s.isEmpty())
-                b[index]=pseudo;
-            else if(s.size()>0 && a[s.peek()]<a[i])
-                b[index]=s.peek();
-            else if(s.size()>0 && a[s.peek()]>=a[i]){
-                while(s.size()>0 && a[s.peek()]>=a[i])
-                    s.pop();
-                if(s.size()==0)
-                    b[index]=pseudo;
-                else
-                    b[index]=s.peek();
+    public static int largestRectangleArea(int[] heights) {
+        int n = heights.length;
+        Stack < Integer > st = new Stack < > ();
+        int leftSmall[] = new int[n];
+        int rightSmall[] = new int[n];
+        for (int i = 0; i < n; i++) {
+            while (!st.isEmpty() && heights[st.peek()] >= heights[i]) {
+                st.pop();
             }
-            s.push(i);
-            index--;
+
+            if (st.isEmpty()) leftSmall[i] = 0;
+            else leftSmall[i] = st.peek() + 1;
+            st.push(i);
         }
-        return b;
-    }
 
-    public int[] nsl(int[] a){
+        // clear the stack to be re-used
+        while (!st.isEmpty()) st.pop();
 
-        int[] b=new int[a.length];
-        int index=0;
-
-         
-        for(int i=0;i<b.length;i++){
-            if(s.isEmpty())
-                b[index]=-1;
-            else if(s.size()>0 && a[s.peek()]<a[i])
-                b[index]=s.peek();
-            else if(s.size()>0 && a[s.peek()]>=a[i]){
-                while(s.size()>0 && a[s.peek()]>=a[i])
-                    s.pop();
-                if(s.size()==0)
-                    b[index]=-1;
-                else
-                    b[index]=s.peek();
+        for (int i = n - 1; i >= 0; i--) {
+            while (!st.isEmpty() && heights[st.peek()] >= heights[i]) {
+                st.pop();
             }
-            s.push(i);
-            index++;
+
+            if (st.isEmpty()) rightSmall[i] = n - 1;
+            else rightSmall[i] = st.peek() - 1;
+
+            st.push(i);
         }
-        return b;
+
+        int maxA = 0;
+        for (int i = 0; i < n; i++) {
+            maxA = Math.max(maxA, heights[i] * (rightSmall[i] - leftSmall[i] + 1));
+        }
+        return maxA;
 
     }
 }
