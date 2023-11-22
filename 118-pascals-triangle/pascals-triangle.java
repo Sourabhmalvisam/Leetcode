@@ -1,18 +1,26 @@
-class Solution { //Striver //Fraz //Neetcode
-	public List<List<Integer>> generate(int numRows) {
-		List<List<Integer>> res = new ArrayList<>();
-		List<Integer> row = null;
-		List<Integer> prevRow = null;
-		for (int i = 0; i<numRows; i++) {
-			row = new ArrayList<>();
-			for (int j = 0; j<= i; j++) {
-				if (j == 0 || i == j) row.add(1);
-				else row.add(prevRow.get(j - 1) + prevRow.get(j));
-			}
-			prevRow = row;
-			res.add(row);
-		}
-		return res;
+class Solution {
+  
+      public static int nCr(int n, int r) {
+        long res = 1;
+        // calculating nCr:
+        for (int i = 0; i < r; i++) {
+            res = res * (n - i);
+            res = res / (i + 1);
+        }
+        return (int) res;
+    }
 
-	}
+    public static List<List<Integer>> generate(int n) {
+        List<List<Integer>> ans = new ArrayList<>();
+
+        // Store the entire Pascal's triangle:
+        for (int row = 1; row <= n; row++) {
+            List<Integer> tempLst = new ArrayList<>(); // temporary list
+            for (int col = 1; col <= row; col++) {
+                tempLst.add(nCr(row - 1, col - 1));
+            }
+            ans.add(tempLst);
+        }
+        return ans;
+    }
 }
