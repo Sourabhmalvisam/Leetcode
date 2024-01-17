@@ -1,14 +1,18 @@
 class Solution {
     public boolean uniqueOccurrences(int[] arr) {
-        Map<Integer,Integer> map= new HashMap<>();
-        for(int ele: arr){
-            map.put(ele, map.getOrDefault(ele,0)+1);
-        }
-        Set<Integer> set= new HashSet<>();
-        for(Map.Entry<Integer,Integer> entry: map.entrySet()){
-            set.add(entry.getValue());
-        }
-        return map.size()==set.size();
+       int countArr[]=new int[2001];
+       boolean freqArr[]=new boolean[1001];
+       for(int ele:arr){
+           countArr[1000+ele]++;
+       }
+       for(int ele: countArr){
+           if(ele!=0){ if(freqArr[ele]){
+               return false;
+           }
+           freqArr[ele]= true;}
+          
+       }
+       return true;
 
     }
 }
