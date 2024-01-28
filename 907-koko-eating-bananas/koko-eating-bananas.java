@@ -1,39 +1,31 @@
 class Solution {
-    public int minEatingSpeed(int[] arr, int h) {
-         int low = 1;
-        int high = findMax(arr);
-        int ans = Integer.MAX_VALUE;
-        // Apply binary search:
-        while (low <= high) {
-            int mid = (low + high) / 2;
-            int totalHr = calculateTotalHours(arr, mid);
-            if (totalHr <= h) {
-                ans = mid;
-                high = mid - 1;
-            } else {
-                low = mid + 1;
+    public int timeToEat(int []piles, int rate){
+        int hours=0;
+        for(int i=0;i<piles.length;i++){
+            hours+=Math.ceil(piles[i]/(double)rate);
+        }
+        return hours;
+    }
+
+    public int minEatingSpeed(int[] piles, int h) {
+        int max=(int)-10e8;
+        for(int i=0;i<piles.length;i++){
+            max=Math.max(max,piles[i]);
+        }
+
+        int low=1;
+        int high=max;
+        int ans=0;
+        while(low<=high){
+            int mid=low+(high-low)/2;
+
+            int timeToEat=timeToEat(piles,mid);
+            if(timeToEat<=h){
+                ans=mid;
+                high=mid-1;
             }
+            else low=mid+1;
         }
-        return ans; 
-    }
-      public static int findMax(int[] arr) {
-        int maxi = Integer.MIN_VALUE;
-
-        int n = arr.length;
-        // Find the maximum:
-        for (int i = 0; i < n; i++) {
-            maxi = Math.max(maxi, arr[i]);
-        }
-        return maxi;
-    }
-
-    public static int calculateTotalHours(int[] arr, int hourly) {
-        int totalHr = 0;
-        int n = arr.length;
-        // Find total hours:
-        for (int i = 0; i < n; i++) {
-            totalHr += Math.ceil((double) arr[i] / hourly); // You have to put (double) else ans will be wrong.
-        }
-        return totalHr;
+        return ans;
     }
 }
