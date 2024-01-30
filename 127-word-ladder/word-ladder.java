@@ -23,8 +23,9 @@ class Solution {
             if(word.equals(endWord)) return steps;
            
            for(int i=0;i<word.length();i++){
-                char[] wordArr=word.toCharArray();
+                
               for(char ch='a';ch<='z';ch++){
+                  char[] wordArr=word.toCharArray();
                   wordArr[i]=ch;
                   String newWord=new String(wordArr);
                   if(set.contains(newWord)){
