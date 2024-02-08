@@ -8,7 +8,7 @@ class Solution {
         }
         @Override
         public int compareTo(Pair o){
-            return o.freq-this.freq;
+            return this.freq-o.freq;
         }
     }
     public String frequencySort(String s) {
@@ -23,7 +23,7 @@ class Solution {
         for(Map.Entry<Character,Integer> entry: map.entrySet()){
             pq.add(new Pair(entry.getKey(),entry.getValue()));
         }
-        Collections.sort(pq,Collections.reverseOrder());
+        Collections.sort(pq);
         String ans="";
         while(!pq.isEmpty()){
             Pair p=pq.removeLast();
