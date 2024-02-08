@@ -17,13 +17,16 @@ class Solution {
         for(char ch: charArr){
             map.put(ch,map.getOrDefault(ch,0)+1);
         }
-        PriorityQueue<Pair> pq=new PriorityQueue<>();
+
+
+        List<Pair> pq= new ArrayList<>();
         for(Map.Entry<Character,Integer> entry: map.entrySet()){
             pq.add(new Pair(entry.getKey(),entry.getValue()));
         }
+        Collections.sort(pq,Collections.reverseOrder());
         String ans="";
         while(!pq.isEmpty()){
-            Pair p=pq.poll();
+            Pair p=pq.removeLast();
             char ch=p.ch;
             int freq=p.freq;
             while(freq>0){
