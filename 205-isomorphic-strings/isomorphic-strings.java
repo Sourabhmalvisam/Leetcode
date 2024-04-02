@@ -5,9 +5,11 @@ class Solution {
 
         Arrays.fill(sToT, -1);
         Arrays.fill(tToS,-1);
-        for(int i=0;i<s.length();i++){
-            int char1 = s.charAt(i);
-            int char2= t.charAt(i);
+        StringBuilder ss = new StringBuilder(s);
+        StringBuilder tt= new StringBuilder(t);
+        for(int i=0;i<ss.length();i++){
+            int char1 = ss.charAt(i);
+            int char2= tt.charAt(i);
             if(sToT[char1]==-1){
                 sToT[char1]= char2;
             }
